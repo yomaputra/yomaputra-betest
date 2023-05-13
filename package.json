@@ -1,0 +1,36 @@
+{
+  "name": "ms-yomaputra-betest",
+  "version": "1.0.0",
+  "description": "Backend coding test for Jenius",
+  "main": "src/app.js",
+  "scripts": {
+    "test": "test",
+    "start": "node ./src/app.js"
+  },
+  "keywords": [
+    "Jenius",
+    "Backend",
+    "Microservice"
+  ],
+  "author": "Yoma Putra Perdana",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "winston": "^3.8.2",
+    "winston-daily-rotate-file": "^4.7.1"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0 || ^8.2.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "^2.8.8"
+  }
+}
