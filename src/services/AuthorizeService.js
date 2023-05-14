@@ -1,6 +1,6 @@
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
-const BadRequest = require("../exceptions/BadRequest",);
+const BadRequest = require("../exceptions/BadRequest");
 
 class AuthorizeService {
   #secret;
@@ -10,10 +10,10 @@ class AuthorizeService {
   }
 
   sign(username, password) {
-    if (username == "yoma" && password == "password") {
-      const token = jwt.sign({ name: "Yoma Putra", }, this.#secret, {
-        expiresIn: "15m",
-      },);
+    if (username === "yoma" && password === "password") {
+      const token = jwt.sign({ name: "Yoma Putra" }, this.#secret, {
+        expiresIn: "30m"
+      });
 
       return token;
     }

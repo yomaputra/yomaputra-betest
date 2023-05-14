@@ -1,3 +1,7 @@
+/* eslint-disable global-require */
+const { ObjectId } = require('mongodb');
+const BadRequest = require("../exceptions/BadRequest");
+
 class UserRepository {
   constructor(db, logger) {
     const modelUser = require("../models/users")(db);
@@ -7,6 +11,7 @@ class UserRepository {
   }
 
   async insert(payload) {
+    // eslint-disable-next-line no-useless-catch
     try {
       const result = await this.model.insertOne(payload);
 
@@ -17,11 +22,8 @@ class UserRepository {
   }
 
   async getAll() {
+    // eslint-disable-next-line no-useless-catch
     try {
-      let query = {};
-      let options = {
-        projection: { _id: 1, userName: 1, accountNumber: 1, emailAddress: 1 },
-      }
       const result = await this.model.find().toArray();
 
       return result;
@@ -31,17 +33,63 @@ class UserRepository {
   }
 
   async find(identity) {
+    // eslint-disable-next-line no-useless-catch
     try {
-      let query = {
+      const query = {
         $or: [
-          { accountNumber: parseInt(identity) },
-          { identityNumber: parseInt(identity) }
+          { accountNumber: parseInt(identity, 10) },
+          { identityNumber: identity }
         ]
       };
-      let options = {
-        projection: { _id: 1, userName: 1, accountNumber: 1, emailAddress: 1 },
-      }
       const result = await this.model.findOne(query);
+
+      if (!result) {
+        throw new BadRequest("User not found", "not_found", 404);
+      }
+
+      return result;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async update(payload, identity) {
+    // eslint-disable-next-line no-useless-catch
+    try {
+      const query = {
+        _id: new ObjectId(identity)
+      };
+
+      const updatePayload = {
+        $set: {
+          ...payload
+        }
+      };
+
+      const result = await this.model.updateOne(query, updatePayload);
+
+      if (!result.matchedCount) {
+        throw new BadRequest("User not found", "not_found", 404);
+      }
+
+      return result;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async delete(identity) {
+    // eslint-disable-next-line no-useless-catch
+    try {
+      const query = {
+        _id: new ObjectId(identity)
+      };
+
+      const result = await this.model.deleteOne(query);
+
+      if (!result.deletedCount) {
+        throw new BadRequest("User not found", "not_found", 404);
+      }
 
       return result;
     } catch (err) {

@@ -5,10 +5,10 @@ const service = new AuthorizeService();
 
 controller.authentication = async (req, res, next) => {
   try {
-    const token = service.sign(req.body.username, req.body.password,);
+    const token = service.sign(req.body.username, req.body.password);
 
     res.status(200).json({
-      token,
+      token
     });
   } catch (error) {
     return next(error);
@@ -17,7 +17,7 @@ controller.authentication = async (req, res, next) => {
 
 controller.dashboard = async (req, res, next) => {
   res.status(200).json({
-    message: "Selamat datang",
+    message: "Selamat datang"
   });
 };
 

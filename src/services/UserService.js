@@ -7,21 +7,27 @@ class UserService {
   async insert(payload) {
     let data;
     try {
-      let result = await this.repository.insert(payload);
       data = {
-        _id: result.insertedId,
         userName: payload.userName,
         accountNumber: payload.accountNumber,
         emailAddress: payload.emailAddress,
-        identityNumber: payload.identityNumber,
-      }
+        identityNumber: payload.identityNumber.toString()
+      };
+
+      const result = await this.repository.insert(data);
+
+      data = {
+        _id: result.insertedId,
+        ...data
+      };
+
     } catch (err) {
       this.logger.error("Test");
       throw err;
     }
 
     return {
-      data: data,
+      data,
       message: "User has inserted"
     };
   }
@@ -36,8 +42,8 @@ class UserService {
     }
 
     return {
-      data: data,
-      message: "User has inserted"
+      data,
+      message: "User has fetch"
     };
   }
 
@@ -51,8 +57,49 @@ class UserService {
     }
 
     return {
-      data: data,
-      message: "User has inserted"
+      data,
+      message: "User Found"
+    };
+  }
+
+  async update(payload, identity) {
+    let data;
+    try {
+      data = {
+        userName: payload.userName,
+        accountNumber: payload.accountNumber,
+        emailAddress: payload.emailAddress,
+        identityNumber: payload.identityNumber.toString()
+      };
+
+      const result = await this.repository.update(data, identity);
+
+      data = {
+        _id: result.insertedId,
+        ...data
+      };
+
+    } catch (err) {
+      this.logger.error("Test");
+      throw err;
+    }
+
+    return {
+      data,
+      message: "User has updated"
+    };
+  }
+
+  async delete(identity) {
+    try {
+      await this.repository.delete(identity);
+    } catch (err) {
+      this.logger.error("Test");
+      throw err;
+    }
+
+    return {
+      message: "User has deleted"
     };
   }
 }

@@ -1,4 +1,4 @@
-const UserService = require("../services/UserService")
+const UserService = require("../services/UserService");
 
 const services = (req, res, next) => {
   const { userRepository } = res.locals;
@@ -7,6 +7,6 @@ const services = (req, res, next) => {
   res.locals.userService = new UserService(userRepository, logger);
 
   return next();
-}
+};
 
 module.exports = services;

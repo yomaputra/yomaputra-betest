@@ -6,6 +6,6 @@ const repositories = (req, res, next) => {
   res.locals.userRepository = new UserRepository(db, logger);
 
   return next();
-}
+};
 
 module.exports = repositories;
