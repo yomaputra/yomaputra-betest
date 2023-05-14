@@ -2,7 +2,7 @@
 
 const Init = require("./init");
 
-const server = new Init;
+const server = new Init();
 server.listenServer();
 
 process.on("SIGINT", (signal) => {

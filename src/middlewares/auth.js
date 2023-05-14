@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const BadRequest = require("../exceptions/BadRequest");
 
-let middleware = {}
+const middleware = {};
 
 middleware.authorization = async (req, res, next) => {
   try {
@@ -10,14 +10,13 @@ middleware.authorization = async (req, res, next) => {
       throw new BadRequest("Unauthorized", "unauthorized", 403);
     }
 
-    const token = authHeader.split(' ')[1];
+    const token = authHeader.split(" ",)[1];
 
-    let decoded = jwt.verify(token, process.env.SECRET);
+    const decoded = jwt.verify(token, process.env.SECRET,);
     next();
   } catch (err) {
-    // throw err;
     next(err);
   }
-}
+};
 
 module.exports = middleware;
