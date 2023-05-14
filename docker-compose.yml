@@ -1,11 +1,27 @@
 version: "3.8"
 
 services:
+  app:
+    container_name: ms-yomaputra-betest
+    ports:
+      - 3000:3000
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file: .env
+    links:
+      - mongodb
+    depends_on:
+      - mongodb
+    environment:
+      WAIT_HOSTS: mongodb:27017
+    networks:
+      - jenius-betest-network
   mongodb:
     container_name: mongodb
     image: mongo:6.0
-    # volumes:
-    #   - ./mongo:/data/db
+    volumes:
+      - ./mongo_data:/data/db
     ports:
       - "27017:27017"
     environment:
@@ -13,8 +29,8 @@ services:
       # - MONGO_INITDB_ROOT_PASSWORD=app_password
       - MONGO_INITDB_DATABASE=db_yomaputra_betest
     networks:
-      - node-webapp-network
+      - jenius-betest-network
 
 networks:
-  node-webapp-network:
+  jenius-betest-network:
     driver: bridge

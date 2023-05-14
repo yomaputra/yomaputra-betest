@@ -37,10 +37,16 @@ class UserRepository {
     try {
       const query = {
         $or: [
-          { accountNumber: parseInt(identity, 10) },
+          // eslint-disable-next-line radix
+          { accountNumber: parseInt(identity) },
           { identityNumber: identity }
         ]
       };
+
+      if (ObjectId.isValid(identity)) {
+        query.$or.push({ _id: new ObjectId(identity) });
+      }
+
       const result = await this.model.findOne(query);
 
       if (!result) {

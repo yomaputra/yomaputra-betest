@@ -11,7 +11,7 @@ controller.authentication = async (req, res, next) => {
       token
     });
   } catch (error) {
-    return next(error);
+    next(error);
   }
 };
 

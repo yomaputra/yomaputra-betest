@@ -43,7 +43,7 @@ class Init {
       );
     }
 
-    const mongoUri = "mongodb://localhost:27017/db_yomaputra_betest";
+    const mongoUri = `mongodb://${process.env.DB_HOST}:27017/${process.env.DB_NAME}`;
     const client = new MongoClient(mongoUri);
 
     const database = client.db('db_yomaputra_betest');

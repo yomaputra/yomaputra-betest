@@ -4,6 +4,7 @@
 # dependencies
 /node_modules
 .env
+/mongo_data
 
 # testing
 /coverage
