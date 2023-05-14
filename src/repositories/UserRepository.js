@@ -2,9 +2,6 @@ class UserRepository {
   constructor(db, logger) {
     const modelUser = require("../models/users")(db);
 
-    // Object.assign(this.model, modelUser);
-    // Object.assign(this.logger, logger)
-
     this.model = modelUser;
     this.logger = logger;
   }
@@ -15,7 +12,39 @@ class UserRepository {
 
       return result;
     } catch (err) {
-      this.logger.error(err);
+      throw err;
+    }
+  }
+
+  async getAll() {
+    try {
+      let query = {};
+      let options = {
+        projection: { _id: 1, userName: 1, accountNumber: 1, emailAddress: 1 },
+      }
+      const result = await this.model.find().toArray();
+
+      return result;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async find(identity) {
+    try {
+      let query = {
+        $or: [
+          { accountNumber: parseInt(identity) },
+          { identityNumber: parseInt(identity) }
+        ]
+      };
+      let options = {
+        projection: { _id: 1, userName: 1, accountNumber: 1, emailAddress: 1 },
+      }
+      const result = await this.model.findOne(query);
+
+      return result;
+    } catch (err) {
       throw err;
     }
   }
