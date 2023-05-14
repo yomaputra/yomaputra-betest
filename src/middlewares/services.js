@@ -2,9 +2,9 @@ const UserService = require("../services/UserService");
 
 const services = (req, res, next) => {
   const { userRepository } = res.locals;
-  const { logger } = req.app.locals;
+  const { logger, redis } = req.app.locals;
 
-  res.locals.userService = new UserService(userRepository, logger);
+  res.locals.userService = new UserService(userRepository, redis, logger);
 
   return next();
 };

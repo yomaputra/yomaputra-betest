@@ -3,6 +3,8 @@ const bodyParser = require("body-parser");
 const winston = require("winston");
 const DailyRotateFile = require("winston-daily-rotate-file");
 const { MongoClient } = require("mongodb");
+// eslint-disable-next-line import/no-extraneous-dependencies
+const redis = require("redis");
 const config = require("../../config");
 const errorHandler = require("../exceptions/handler");
 const router = require("../routes");
@@ -43,11 +45,20 @@ class Init {
       );
     }
 
+    // Mongo Connection
     const mongoUri = `mongodb://${process.env.DB_HOST}:27017/${process.env.DB_NAME}`;
     const client = new MongoClient(mongoUri);
 
     const database = client.db('db_yomaputra_betest');
     this.app.locals.db = database;
+
+    // Redis Init Connection
+    const redisClient = redis.createClient({
+      url: `redis://${process.env.REDIS_HOST}:6379`
+    });
+    redisClient.on('error', err => this.logger.error('Redis Client Error', err));
+    this.runRedis(redisClient);
+    this.app.locals.redis = redisClient;
 
     this.app.use(repositories);
     this.app.use(services);
@@ -75,6 +86,13 @@ class Init {
 
     if (this.server) {
       this.server.close();
+    }
+  }
+
+  async runRedis(redisClient) {
+    await redisClient.connect();
+    if (redisClient.isReady) {
+      this.logger.info('Redis Client Ready on Port: 6379');
     }
   }
 }

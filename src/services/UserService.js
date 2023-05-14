@@ -1,7 +1,8 @@
 class UserService {
-  constructor(repository, logger) {
+  constructor(repository, redis, logger) {
     this.repository = repository;
     this.logger = logger;
+    this.redis = redis;
   }
 
   async insert(payload) {
@@ -22,7 +23,7 @@ class UserService {
       };
 
     } catch (err) {
-      this.logger.error("Test");
+      this.logger.error({ err });
       throw err;
     }
 
@@ -33,17 +34,31 @@ class UserService {
   }
 
   async getAll() {
-    let data;
+    let data; let meta;
     try {
-      data = await this.repository.getAll();
+      meta = {
+        fromCache: true
+      };
+      const cacheData = await this.redis.get('users-cache');
+
+      if (!cacheData) {
+        data = await this.repository.getAll();
+        await this.redis.set("users-cache", JSON.stringify(data));
+        await this.redis.expire("users-cache", 60);
+        // Object.assign(data, result);
+        meta.fromCache = false;
+      } else {
+        data = JSON.parse(cacheData);
+      }
     } catch (err) {
-      this.logger.error("Test");
+      this.logger.error({ err });
       throw err;
     }
 
     return {
       data,
-      message: "User has fetch"
+      message: "User has fetch",
+      meta
     };
   }
 
@@ -52,7 +67,7 @@ class UserService {
     try {
       data = await this.repository.find(identity);
     } catch (err) {
-      this.logger.error("Test");
+      this.logger.error({ err });
       throw err;
     }
 
@@ -80,7 +95,7 @@ class UserService {
       };
 
     } catch (err) {
-      this.logger.error("Test");
+      this.logger.error({ err });
       throw err;
     }
 
@@ -94,7 +109,7 @@ class UserService {
     try {
       await this.repository.delete(identity);
     } catch (err) {
-      this.logger.error("Test");
+      this.logger.error({ err });
       throw err;
     }
 

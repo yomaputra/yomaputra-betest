@@ -13,6 +13,7 @@ services:
       - mongodb
     depends_on:
       - mongodb
+      - redis_yomaputra_betest
     environment:
       WAIT_HOSTS: mongodb:27017
     networks:
@@ -28,6 +29,13 @@ services:
       # - MONGO_INITDB_ROOT_USERNAME=app_user
       # - MONGO_INITDB_ROOT_PASSWORD=app_password
       - MONGO_INITDB_DATABASE=db_yomaputra_betest
+    networks:
+      - jenius-betest-network
+  redis_yomaputra_betest:
+    container_name: redis_yomaputra_betest
+    image: redis:alpine3.18
+    ports:
+      - 6379:6379
     networks:
       - jenius-betest-network
 
