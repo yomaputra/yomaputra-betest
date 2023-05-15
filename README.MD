@@ -19,6 +19,9 @@ the purpose of this test is to create a microservice with (Node JS - Express) fo
 #### Building and Deploying
 - Run `docker-compose --build -d` on root folder for build and run with docker
 
+#### Credentials
+- To get JWT token use the following credentials `username`: `yoma` and `password`: `password`
+
 ## List of Dependencies
 - [body-parser](https://github.com/expressjs/body-parser)
 - [dotenv](https://github.com/motdotla/dotenv)
